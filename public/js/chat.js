@@ -1,13 +1,19 @@
 const socket = io()
 
-socket.on('countUpdated', (iCnt)=>{
-    console.log('The count has been updated!', iCnt)
+socket.on('Message', (str)=>{
+    console.log(str)
 })
 
-const increament = document.querySelector('#increament')
+const ip = document.querySelector('#ip')
+const msgSub = document.querySelector('#msgSub')
+const form = document.querySelector('#msg-form')
 
-increament.addEventListener('click', ()=>{
-    console.log('Clicked')
-    // console.clear()
-    socket.emit('increament')
+form.addEventListener('submit', (e)=>{
+    e.preventDefault()
+    const message = e.target.elements.ip.value
+    // console.log('message')
+    if(message.trim() != "")
+    {
+        socket.emit('sendMessage', message)
+    }
 })
