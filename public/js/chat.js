@@ -7,6 +7,7 @@ socket.on('Message', (str)=>{
 const ip = document.querySelector('#ip')
 const msgSub = document.querySelector('#msgSub')
 const form = document.querySelector('#msg-form')
+const sendLocation = document.querySelector('#sendLocation')
 
 form.addEventListener('submit', (e)=>{
     e.preventDefault()
@@ -16,4 +17,20 @@ form.addEventListener('submit', (e)=>{
     {
         socket.emit('sendMessage', message)
     }
+})
+
+sendLocation.addEventListener('click', ()=>{
+    if(!navigator.geolocation)
+    {
+        return alert('Geolaction is not supported by your browser')
+    }
+
+    navigator.geolocation.getCurrentPosition((position)=>{
+        coord = {
+            lat:position.coords.latitude,
+            lon:position.coords.longitude
+        }
+
+        socket.emit('sendLocation', coord)
+    })
 })

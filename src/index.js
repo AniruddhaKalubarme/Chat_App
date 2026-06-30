@@ -17,10 +17,19 @@ app.use(express.static(publicDirectoryPath))
 io.on('connection', (socket)=>{
     console.log("New WebSocket Connection")
     socket.emit('Message', "Welcome to the Panel")
+    socket.broadcast.emit("Message", 'A new user has joined')
 
     socket.on('sendMessage', (msg)=>{
         console.log("message received: ", msg)
         io.emit('Message', msg)
+    })
+
+    socket.on('sendLocation', (coord)=>{
+        socket.broadcast.emit('Message', `https://google.com/maps?q=${coord.lat},${coord.lon}`)
+    })
+
+    socket.on('disconnect', ()=>{
+        io.emit('Message', 'A user has left')
     })
 })
 
