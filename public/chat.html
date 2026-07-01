@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Chat App</title>
         <link rel="stylesheet" href="/css/style.css">
+        <link rel="icon" type="image/png" href="/logo.png">
     </head>
     <body class="chat-page">
         <main class="chat-shell">
@@ -16,7 +17,11 @@
                 <button id="sendLocation" class="secondary-button">Share location</button>
             </header>
 
-            <section id="messages" class="message-feed" aria-live="polite"></section>
+            <section class="chat-body">
+                <section id="messages" class="message-feed" aria-live="polite"></section>
+
+                <aside id="sidebar" class="sidebar-panel"></aside>
+            </section>
 
             <form id="msg-form" class="composer">
                 <label for="ip">Enter the Text</label>
@@ -45,6 +50,18 @@
                 </div>
                 <a class="location-link" href="{{location}}" target="_blank" rel="noopener noreferrer">Open shared location</a>
             </article>
+        </script>
+
+        <script id="sidebar-template" type="text/html">
+            <div class="sidebar-card">
+                <p class="sidebar-title">Room: {{roomName}}</p>
+                <p class="sidebar-subtitle">Users</p>
+                <ul class="users-list">
+                    {{#users}}
+                    <li class="users-list__item">{{userName}}</li>
+                    {{/users}}
+                </ul>
+            </div>
         </script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>

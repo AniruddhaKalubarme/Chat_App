@@ -7,11 +7,18 @@ const sendLocation = document.querySelector('#sendLocation')
 const messages = document.querySelector('#messages')
 const messageTemplate = document.querySelector('#message-template').innerHTML
 const locationTemplate = document.querySelector('#location-template').innerHTML
+const sidebarTemplate = document.querySelector('#sidebar-template').innerHTML
 
 const {userName, roomName} = Qs.parse(location.search, {ignoreQueryPrefix: true})
 const currentUser = (userName || '').trim().toLowerCase()
 
 const isOwnMessage = (sender) => sender && sender.trim().toLowerCase() === currentUser
+
+const autoscroll = () => {
+    requestAnimationFrame(() => {
+        messages.scrollTop = messages.scrollHeight
+    })
+}
 
 socket.on('Message', (strObj)=>{
     // console.log('strobj is: ',strObj)
@@ -22,6 +29,7 @@ socket.on('Message', (strObj)=>{
         isOwn: isOwnMessage(strObj.user)
     })
     messages.insertAdjacentHTML('beforeend', html)
+    autoscroll()
 })
 
 socket.on('sendLocationFromServer', (locObj)=>{
@@ -33,6 +41,16 @@ socket.on('sendLocationFromServer', (locObj)=>{
         isOwn: isOwnMessage(locObj.user)
     })
     messages.insertAdjacentHTML('beforeend', html)
+    autoscroll()
+})
+
+socket.on('roomData', ({roomName, users}) => {
+    const html = Mustache.render(sidebarTemplate, {
+        roomName,
+        users
+    })
+
+    document.querySelector('#sidebar').innerHTML = html
 })
 
 form.addEventListener('submit', (e)=>{
