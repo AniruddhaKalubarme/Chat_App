@@ -7,25 +7,11 @@ const sendLocation = document.querySelector('#sendLocation')
 const messages = document.querySelector('#messages')
 const messageTemplate = document.querySelector('#message-template').innerHTML
 const locationTemplate = document.querySelector('#location-template').innerHTML
-const sidebarTemplate = document.querySelector('#sidebar-template').innerHTML
 
 const {userName, roomName} = Qs.parse(location.search, {ignoreQueryPrefix: true})
 const currentUser = (userName || '').trim().toLowerCase()
 
 const isOwnMessage = (sender) => sender && sender.trim().toLowerCase() === currentUser
-
-const autoscroll = () => {
-    const newMessage = messages.lastElementChild
-
-    if(!newMessage)
-    {
-        return
-    }
-
-    requestAnimationFrame(() => {
-        messages.scrollTop = messages.scrollHeight
-    })
-}
 
 socket.on('Message', (strObj)=>{
     // console.log('strobj is: ',strObj)
@@ -36,7 +22,6 @@ socket.on('Message', (strObj)=>{
         isOwn: isOwnMessage(strObj.user)
     })
     messages.insertAdjacentHTML('beforeend', html)
-    autoscroll()
 })
 
 socket.on('sendLocationFromServer', (locObj)=>{
@@ -48,7 +33,6 @@ socket.on('sendLocationFromServer', (locObj)=>{
         isOwn: isOwnMessage(locObj.user)
     })
     messages.insertAdjacentHTML('beforeend', html)
-    autoscroll()
 })
 
 form.addEventListener('submit', (e)=>{
@@ -93,26 +77,7 @@ sendLocation.addEventListener('click', ()=>{
             console.log("Location shared");
             sendLocation.removeAttribute('disabled')
         })
-    }, (error) => {
-        console.error(error)
-        alert('Could not get a more accurate location right now.')
-        sendLocation.removeAttribute('disabled')
-    }, {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0
     })
-})
-
-socket.on('roomData', ({roomName, users}) => {
-    if(!sidebarTemplate) return
-    const html = Mustache.render(sidebarTemplate, {
-        roomName : roomName,
-        users
-    })
-
-    const sidebarEl = document.querySelector('#sidebar')
-    if(sidebarEl) sidebarEl.innerHTML = html
 })
 
 socket.emit('join', {userName, roomName}, (error) => {
