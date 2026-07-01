@@ -1,33 +1,30 @@
 <!DOCTYPE html>
-<html>
-    <head></head>
-    <body>
-        Chat APP
-        <div id="messages"></div>
-        <br>
-        <form id="msg-form">
-            <label for="ip">Enter the Text</label>
-            <input type="text" id="ip" name="ip">
-            <button type="submit" id="msgSub">Send</button>
-        </form>
-        <button id="sendLocation">Send Location</button>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Chat App</title>
+        <link rel="stylesheet" href="/css/style.css">
+    </head>
+    <body class="auth-page">
+        <main class="auth-card">
+            <p class="auth-eyebrow">Live room</p>
+            <h1 class="auth-title">Join a room</h1>
+            <p class="auth-copy">Pick a nickname and room to start chatting instantly.</p>
 
-        <script id="message-template" type="text/html">
-            <div>
-                <p>{{createdAt}} - {{message}}</p>
-            </div>
-        </script>
+            <form action="./chat.html" class="auth-form">
+                <div class="field">
+                    <label for="userName">User Name</label>
+                    <input type="text" name="userName" id="userName" placeholder="e.g. Alex" required>
+                </div>
 
-        <script id="location-template" type="text/html">
-            <div>
-                <a href={{location}} target="'_blank">Go to Location</a>
-            </div>
-        </script>
+                <div class="field">
+                    <label for="roomName">Room Name</label>
+                    <input type="text" name="roomName" id="roomName" placeholder="e.g. design-team" required>
+                </div>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.6.0/qs.min.js"></script>
-        <script src="/socket.io/socket.io.js"></script>
-        <script src="/js/chat.js"></script>
+                <button type="submit" id="joinBtn" class="primary-button">Join room</button>
+            </form>
+        </main>
     </body>
 </html>
